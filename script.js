@@ -1,5 +1,5 @@
 
-// Products data
+// Products data for the collection section
 const products = [
   {
     id: 1,
@@ -83,204 +83,43 @@ const products = [
   }
 ];
 
-// DOM Elements
-const navbar = document.getElementById('navbar');
-const menuToggle = document.getElementById('menuToggle');
-const closeMenu = document.getElementById('closeMenu');
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileProductCarousel = document.getElementById('mobileProductCarousel');
-const carouselIndicators = document.getElementById('carouselIndicators');
-const prevProduct = document.getElementById('prevProduct');
-const nextProduct = document.getElementById('nextProduct');
-const productGrid = document.getElementById('productGrid');
-const productModal = document.getElementById('productModal');
-const closeProductModal = document.getElementById('closeProductModal');
-const contactForm = document.getElementById('contactForm');
-const formSuccess = document.getElementById('formSuccess');
-const currentYearEl = document.getElementById('currentYear');
-
-// State
-let currentIndex = 0;
-
-// Set current year in footer
-currentYearEl.textContent = new Date().getFullYear();
-
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 20) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
+document.addEventListener('DOMContentLoaded', function() {
+  // Set current year in footer
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
   
-  // Check for scroll elements
-  const scrollElements = document.querySelectorAll('.scroll-element');
-  scrollElements.forEach((element) => {
-    const rect = element.getBoundingClientRect();
-    const isVisible = rect.top < window.innerHeight * 0.8;
-    
-    if (isVisible) {
-      element.classList.add('visible');
+  // Mobile menu functionality
+  const menuToggle = document.getElementById('menuToggle');
+  const closeMenu = document.getElementById('closeMenu');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  menuToggle.addEventListener('click', function() {
+    mobileMenu.classList.remove('hidden');
+    mobileMenu.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  });
+
+  closeMenu.addEventListener('click', function() {
+    closeMobileMenu();
+  });
+
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 20) {
+      navbar.classList.add('glass', 'py-2');
+      navbar.classList.remove('py-4');
+    } else {
+      navbar.classList.remove('glass', 'py-2');
+      navbar.classList.add('py-4');
     }
   });
-});
 
-// Mobile menu toggle
-menuToggle.addEventListener('click', () => {
-  mobileMenu.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-});
-
-closeMenu.addEventListener('click', () => {
-  mobileMenu.classList.add('hidden');
-  document.body.style.overflow = '';
-});
-
-function closeMobileMenu() {
-  mobileMenu.classList.add('hidden');
-  document.body.style.overflow = '';
-}
-
-// Smooth scrolling for anchor links
-function scrollToSection(id) {
-  const element = document.getElementById(id);
-  if (element) {
-    const yOffset = -80; // Adjust for header height
-    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-  }
-}
-
-// Initialize product carousel for mobile
-function renderMobileCarousel() {
-  // Clear existing content
-  mobileProductCarousel.innerHTML = '';
-  carouselIndicators.innerHTML = '';
-  
-  // Create product slide
-  const product = products[currentIndex];
-  const slide = document.createElement('div');
-  slide.className = 'w-full';
-  slide.innerHTML = `
-    <div class="glass p-3 rounded-sm" onclick="openProductDetails(${product.id})">
-      <div class="relative aspect-[3/4] overflow-hidden rounded-sm">
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-          class="w-full h-full object-cover"
-        />
-        <div class="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
-          <p class="text-xs text-gold">${product.category}</p>
-          <h3 class="font-playfair text-lg text-white mb-1">${product.name}</h3>
-          <p class="text-sm text-white/80">$${product.price}</p>
-        </div>
-      </div>
-    </div>
-  `;
-  mobileProductCarousel.appendChild(slide);
-  
-  // Create indicators
-  products.forEach((_, index) => {
-    const indicator = document.createElement('div');
-    indicator.className = `h-1 rounded-full ${index === currentIndex ? 'w-6 bg-gold' : 'w-2 bg-gold/30'} transition-all duration-300`;
-    carouselIndicators.appendChild(indicator);
-  });
-}
-
-// Initialize product grid for desktop
-function renderProductGrid() {
-  productGrid.innerHTML = '';
-  
-  products.slice(0, 8).forEach(product => {
-    const item = document.createElement('div');
-    item.className = 'glass p-3 rounded-sm group cursor-pointer scroll-element';
-    item.onclick = () => openProductDetails(product.id);
+  // Scroll animations
+  function handleScroll() {
+    const scrollElements = document.querySelectorAll('.scroll-element');
     
-    item.innerHTML = `
-      <div class="relative aspect-[3/4] overflow-hidden rounded-sm">
-        <img
-          src="${product.image}"
-          alt="${product.name}"
-          class="w-full h-full object-cover transition-all duration-500"
-        />
-        <div class="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
-          <p class="text-xs text-gold">${product.category}</p>
-          <h3 class="font-playfair text-lg text-white mb-1">${product.name}</h3>
-          <p class="text-sm text-white/80">$${product.price}</p>
-        </div>
-      </div>
-    `;
-    
-    productGrid.appendChild(item);
-  });
-}
-
-// Navigation for mobile carousel
-nextProduct.addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % products.length;
-  renderMobileCarousel();
-});
-
-prevProduct.addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + products.length) % products.length;
-  renderMobileCarousel();
-});
-
-// Product Modal
-function openProductDetails(productId) {
-  const product = products.find(p => p.id === productId);
-  if (!product) return;
-  
-  document.getElementById('modalProductImage').src = product.image;
-  document.getElementById('modalProductName').textContent = product.name;
-  document.getElementById('modalProductCategory').textContent = product.category;
-  document.getElementById('modalProductPrice').textContent = '$' + product.price;
-  document.getElementById('modalProductDescription').textContent = product.description;
-  
-  productModal.classList.remove('hidden');
-  productModal.classList.add('flex');
-  document.body.style.overflow = 'hidden';
-}
-
-closeProductModal.addEventListener('click', () => {
-  productModal.classList.add('hidden');
-  productModal.classList.remove('flex');
-  document.body.style.overflow = '';
-});
-
-// Contact Form Submission
-contactForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  
-  const formData = {
-    name: document.getElementById('name').value,
-    email: document.getElementById('email').value,
-    message: document.getElementById('message').value
-  };
-  
-  console.log('Form submitted:', formData);
-  
-  // Show success message
-  contactForm.classList.add('hidden');
-  formSuccess.classList.remove('hidden');
-  
-  // Reset form after delay
-  setTimeout(() => {
-    formSuccess.classList.add('hidden');
-    contactForm.classList.remove('hidden');
-    contactForm.reset();
-  }, 3000);
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-  renderMobileCarousel();
-  renderProductGrid();
-  
-  // Initialize scroll animations
-  const scrollElements = document.querySelectorAll('.scroll-element');
-  setTimeout(() => {
-    scrollElements.forEach((element) => {
+    scrollElements.forEach(element => {
       const rect = element.getBoundingClientRect();
       const isVisible = rect.top < window.innerHeight * 0.8;
       
@@ -288,28 +127,201 @@ document.addEventListener('DOMContentLoaded', () => {
         element.classList.add('visible');
       }
     });
-  }, 300);
+  }
   
-  // Handle click outside mobile menu
-  document.addEventListener('click', (e) => {
-    if (mobileMenu.classList.contains('hidden')) return;
-    
-    if (!e.target.closest('#mobileMenu') && !e.target.closest('#menuToggle')) {
-      closeMobileMenu();
-    }
-  });
+  window.addEventListener('scroll', handleScroll);
+  handleScroll(); // Initialize on page load
   
-  // Handle click outside product modal
-  document.addEventListener('click', (e) => {
-    if (productModal.classList.contains('hidden')) return;
-    
-    if (!e.target.closest('.max-w-3xl') && !e.target.closest('[onclick*="openProductDetails"]')) {
-      productModal.classList.add('hidden');
-      productModal.classList.remove('flex');
-      document.body.style.overflow = '';
-    }
-  });
+  // Product collection 
+  setupProductCarousel();
+  setupProductGrid();
+  setupProductModal();
+
+  // Contact form submission
+  setupContactForm();
 });
 
-// Custom global function
-window.openProductDetails = openProductDetails;
+// Helper functions
+function scrollToSection(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function closeMobileMenu() {
+  const mobileMenu = document.getElementById('mobileMenu');
+  mobileMenu.classList.add('hidden');
+  mobileMenu.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+
+// Mobile product carousel setup
+function setupProductCarousel() {
+  let currentIndex = 0;
+  const mobileCarousel = document.getElementById('mobileProductCarousel');
+  const indicators = document.getElementById('carouselIndicators');
+  const prevButton = document.getElementById('prevProduct');
+  const nextButton = document.getElementById('nextProduct');
+  
+  // Create initial product card
+  updateCarousel();
+  
+  // Create indicators
+  products.forEach((_, index) => {
+    const indicator = document.createElement('div');
+    indicator.className = `h-1 rounded-full ${index === 0 ? 'w-6 bg-gold' : 'w-2 bg-gold/30'} transition-all duration-300`;
+    indicator.setAttribute('data-index', index);
+    indicators.appendChild(indicator);
+  });
+  
+  // Add event listeners for navigation
+  prevButton.addEventListener('click', function() {
+    currentIndex = (currentIndex - 1 + products.length) % products.length;
+    updateCarousel();
+  });
+  
+  nextButton.addEventListener('click', function() {
+    currentIndex = (currentIndex + 1) % products.length;
+    updateCarousel();
+  });
+  
+  function updateCarousel() {
+    const product = products[currentIndex];
+    
+    // Clear and update carousel
+    mobileCarousel.innerHTML = `
+      <div class="glass p-3 rounded-sm" data-product-id="${product.id}">
+        <div class="relative aspect-[3/4] overflow-hidden rounded-sm">
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
+            <p class="text-xs text-gold/80">${product.category}</p>
+            <h3 class="font-playfair text-lg text-white mb-1">${product.name}</h3>
+            <p class="text-sm text-white/80">$${product.price}</p>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Update indicators
+    const allIndicators = indicators.querySelectorAll('div');
+    allIndicators.forEach((indicator, index) => {
+      if (index === currentIndex) {
+        indicator.className = 'h-1 rounded-full w-6 bg-gold transition-all duration-300';
+      } else {
+        indicator.className = 'h-1 rounded-full w-2 bg-gold/30 transition-all duration-300';
+      }
+    });
+
+    // Add click event to open product modal
+    mobileCarousel.querySelector(`[data-product-id="${product.id}"]`).addEventListener('click', function() {
+      openProductModal(product);
+    });
+  }
+}
+
+// Desktop product grid setup
+function setupProductGrid() {
+  const productGrid = document.getElementById('productGrid');
+  
+  // Generate product cards for desktop grid
+  products.slice(0, 8).forEach((product, index) => {
+    const productCard = document.createElement('div');
+    productCard.className = 'glass p-3 rounded-sm group cursor-pointer scroll-element';
+    productCard.setAttribute('data-product-id', product.id);
+    
+    productCard.innerHTML = `
+      <div class="relative aspect-[3/4] overflow-hidden rounded-sm">
+        <img
+          src="${product.image}"
+          alt="${product.name}"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div class="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
+          <p class="text-xs text-gold/80">${product.category}</p>
+          <h3 class="font-playfair text-lg text-white mb-1">${product.name}</h3>
+          <p class="text-sm text-white/80">$${product.price}</p>
+        </div>
+      </div>
+    `;
+    
+    // Add a small delay to each card for staggered animation
+    productCard.style.animationDelay = `${index * 0.1}s`;
+    
+    productGrid.appendChild(productCard);
+    
+    // Add click event to open product modal
+    productCard.addEventListener('click', function() {
+      openProductModal(product);
+    });
+  });
+}
+
+// Product modal functionality
+function setupProductModal() {
+  const modal = document.getElementById('productModal');
+  const closeBtn = document.getElementById('closeProductModal');
+  
+  closeBtn.addEventListener('click', function() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  });
+}
+
+function openProductModal(product) {
+  const modal = document.getElementById('productModal');
+  const modalImage = document.getElementById('modalProductImage');
+  const modalCategory = document.getElementById('modalProductCategory');
+  const modalName = document.getElementById('modalProductName');
+  const modalPrice = document.getElementById('modalProductPrice');
+  const modalDescription = document.getElementById('modalProductDescription');
+  
+  // Populate modal content
+  modalImage.src = product.image;
+  modalImage.alt = product.name;
+  modalCategory.textContent = product.category;
+  modalName.textContent = product.name;
+  modalPrice.textContent = '$' + product.price;
+  modalDescription.textContent = product.description;
+  
+  // Show modal
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+// Contact form functionality
+function setupContactForm() {
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+  
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      message: document.getElementById('message').value
+    };
+    
+    // Log form data (in a real application, this would be sent to a server)
+    console.log('Form submitted:', formData);
+    
+    // Show success message
+    contactForm.classList.add('hidden');
+    formSuccess.classList.remove('hidden');
+    
+    // Reset form after 3 seconds
+    setTimeout(function() {
+      formSuccess.classList.add('hidden');
+      contactForm.classList.remove('hidden');
+      contactForm.reset();
+    }, 3000);
+  });
+}
