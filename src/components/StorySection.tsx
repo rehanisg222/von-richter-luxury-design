@@ -29,15 +29,8 @@ const StorySection = () => {
               and redefine what luxury means in the modern era.
             </p>
             <div className="flex items-center">
-              <div className="mr-4">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop"
-                  alt="Designer"
-                  className="w-12 h-12 rounded-full object-cover border border-gold/30"
-                />
-              </div>
               <div>
-                <p className="font-playfair text-gold">Alexander Von Richter</p>
+                <p className="font-playfair text-gold">Srishti</p>
                 <p className="text-sm text-white/60">Founder & Creative Director</p>
               </div>
             </div>
