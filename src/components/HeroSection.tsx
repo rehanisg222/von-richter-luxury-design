@@ -14,18 +14,18 @@ const HeroSection = () => {
   return (
     <section id="home" className="relative h-screen w-full overflow-hidden bg-black">
       {/* Background overlay with a gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/30"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 to-black/30 z-10"></div>
       
       {/* Background image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: 'url("https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop")', 
-          filter: 'brightness(0.5)' 
+          backgroundImage: 'url("/lovable-uploads/af6c6b65-25d0-4d03-a1d9-96996743ef5f.png")',
+          filter: 'brightness(0.7)'
         }}
       ></div>
       
-      <div className="relative h-full flex flex-col justify-center items-center px-4 text-center">
+      <div className="relative h-full flex flex-col justify-center items-center px-4 text-center z-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
