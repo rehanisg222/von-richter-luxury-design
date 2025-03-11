@@ -1,10 +1,13 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import ProductCard from './ProductCard';
+import ProductModal from './ProductModal';
+import ProductCarousel from './ProductCarousel';
+import { Product } from '../types/product';
 
 // Define the products using the provided images
-const products = [
+const products: Product[] = [
   {
     id: 1,
     name: 'Classic Cream Blazer',
@@ -24,18 +27,9 @@ const products = [
 ];
 
 const CollectionSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const nextProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-  };
-
-  const prevProduct = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
-  };
-
-  const openProductDetails = (product) => {
+  const openProductDetails = (product: Product) => {
     setSelectedProduct(product);
   };
 
@@ -66,56 +60,10 @@ const CollectionSection = () => {
         <div className="relative mt-12">
           {/* Mobile Carousel */}
           <div className="md:hidden">
-            <div className="relative overflow-hidden">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full"
-              >
-                <div 
-                  className="glass p-3 rounded-sm"
-                  onClick={() => openProductDetails(products[currentIndex])}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
-                    <img
-                      src={products[currentIndex].image}
-                      alt={products[currentIndex].name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
-                      <p className="text-xs text-gold/80">{products[currentIndex].category}</p>
-                      <h3 className="font-playfair text-lg text-white mb-1">{products[currentIndex].name}</h3>
-                      <p className="text-sm text-white/80">${products[currentIndex].price}</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <button
-                onClick={prevProduct}
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-gold"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                onClick={nextProduct}
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/50 p-2 rounded-full text-gold"
-              >
-                <ChevronRight size={20} />
-              </button>
-
-              <div className="flex justify-center mt-4 space-x-2">
-                {products.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`h-1 rounded-full ${index === currentIndex ? 'w-6 bg-gold' : 'w-2 bg-gold/30'} transition-all duration-300`}
-                  />
-                ))}
-              </div>
-            </div>
+            <ProductCarousel 
+              products={products} 
+              onProductClick={openProductDetails} 
+            />
             <div className="mt-6 flex justify-center">
               <button className="button-secondary">VIEW ALL</button>
             </div>
@@ -124,28 +72,11 @@ const CollectionSection = () => {
           {/* Desktop Grid */}
           <div className="hidden md:grid grid-cols-2 gap-6">
             {products.map((product) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: product.id * 0.1 }}
-                viewport={{ once: true }}
-                className="glass p-3 rounded-sm group cursor-pointer"
-                onClick={() => openProductDetails(product)}
-              >
-                <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 glass backdrop-blur-md">
-                    <p className="text-xs text-gold/80">{product.category}</p>
-                    <h3 className="font-playfair text-lg text-white mb-1">{product.name}</h3>
-                    <p className="text-sm text-white/80">${product.price}</p>
-                  </div>
-                </div>
-              </motion.div>
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                onClick={openProductDetails} 
+              />
             ))}
           </div>
           <div className="hidden md:flex justify-center mt-8">
@@ -155,50 +86,10 @@ const CollectionSection = () => {
 
         {/* Product Detail Modal */}
         {selectedProduct && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="relative w-full max-w-3xl glass rounded-sm p-5 md:p-8"
-            >
-              <button 
-                onClick={closeProductDetails}
-                className="absolute right-4 top-4 text-gold hover:text-white"
-              >
-                ✕
-              </button>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="aspect-[3/4] overflow-hidden rounded-sm">
-                  <img
-                    src={selectedProduct.image}
-                    alt={selectedProduct.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                <div className="flex flex-col justify-between">
-                  <div>
-                    <p className="text-xs text-gold mb-2">{selectedProduct.category}</p>
-                    <h3 className="font-playfair text-2xl text-white mb-3">{selectedProduct.name}</h3>
-                    <p className="text-lg text-gold mb-6">${selectedProduct.price}</p>
-                    
-                    <div className="h-px w-full bg-gold/20 my-4"></div>
-                    
-                    <p className="body-text text-white/80 mb-6">
-                      {selectedProduct.description}
-                    </p>
-                  </div>
-                  
-                  <div className="mt-auto">
-                    <button className="button-primary w-full mb-3">ADD TO CART</button>
-                    <button className="button-secondary w-full">SAVE FOR LATER</button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <ProductModal 
+            product={selectedProduct} 
+            onClose={closeProductDetails} 
+          />
         )}
       </div>
     </section>
