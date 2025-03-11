@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
-import ProductView360 from './ProductView360';
 
 // Define the products using the provided images
 const products = [
@@ -13,15 +12,6 @@ const products = [
     image: '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
     category: 'Formalwear',
     description: 'Double-breasted minimalist blazer with Von Richter monogram subtly embossed on the fabric. Hidden inside pocket with NFC chip for digital authentication. Matte black buttons with gold engraving.',
-    images360: [
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-      // Simulate multiple angles for 360 view (in a real app, you'd have multiple actual images)
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
-    ]
   },
   {
     id: 2,
@@ -30,15 +20,6 @@ const products = [
     image: '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
     category: 'Outerwear',
     description: 'Structured long coat with sharp lapels and premium silk lining. Classic button closure for a timeless elegance. Made from cashmere-wool blend with water-repellent nano-coating.',
-    images360: [
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-      // Simulate multiple angles for 360 view
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-      '/lovable-uploads/0642ce10-4f24-4699-9af9-0e2c4fd36b1f.png',
-    ]
   }
 ];
 
@@ -189,10 +170,13 @@ const CollectionSection = () => {
               </button>
               
               <div className="grid md:grid-cols-2 gap-6">
-                <ProductView360 
-                  images={selectedProduct.images360} 
-                  className="aspect-[3/4] overflow-hidden rounded-sm"
-                />
+                <div className="aspect-[3/4] overflow-hidden rounded-sm">
+                  <img
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 
                 <div className="flex flex-col justify-between">
                   <div>
