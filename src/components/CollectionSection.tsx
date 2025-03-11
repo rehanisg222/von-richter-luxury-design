@@ -10,17 +10,17 @@ const products = [
     id: 1,
     name: 'Classic Cream Blazer',
     price: '3,800',
-    image: '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
+    image: '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
     category: 'Formalwear',
     description: 'Double-breasted minimalist blazer with Von Richter monogram subtly embossed on the fabric. Hidden inside pocket with NFC chip for digital authentication. Matte black buttons with gold engraving.',
     images360: [
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
       // Simulate multiple angles for 360 view (in a real app, you'd have multiple actual images)
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
-      '/lovable-uploads/a0e3661a-496f-4f74-ae5d-e605067af51b.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
+      '/lovable-uploads/e68801b8-8bc1-4522-8be0-c06bdd673105.png',
     ]
   },
   {
